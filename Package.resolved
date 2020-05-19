@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "JSONAPI",
+        "repositoryURL": "https://github.com/mattpolzin/JSONAPI",
+        "state": {
+          "branch": null,
+          "revision": "def323ca9d66fd4a0584563fa39c3c78e65d7d9a",
+          "version": "4.0.0-alpha.3"
+        }
+      },
+      {
+        "package": "Poly",
+        "repositoryURL": "https://github.com/mattpolzin/Poly",
+        "state": {
+          "branch": null,
+          "revision": "9031b8497e025cbcfae196e59eecad5ba988e267",
+          "version": "2.4.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -12,6 +12,10 @@ public protocol StorableResource {
     func store(in store: ResourceStore)
 }
 
+extension NoIncludes: StorableResource {
+    public func store(in store: ResourceStore) {}
+}
+
 extension Include1: StorableResource where A: JSONAPI.IdentifiableResourceObjectType {
     public func store(in store: ResourceStore) {
         switch self {

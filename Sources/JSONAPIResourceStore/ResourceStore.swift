@@ -15,7 +15,14 @@ public final class ResourceStore {
 
     /// Update or insert (upsert) the given resource.
     public func upsert<T: JSONAPI.IdentifiableResourceObjectType>(_ resource: T) {
-        storage[ObjectIdentifier(T.Id.self), default: [:]][resource.id] = resource
+        upsert([resource])
+    }
+
+    /// Update or insert (upsert) the given resources.
+    public func upsert<T: JSONAPI.IdentifiableResourceObjectType>(_ resources: [T]) {
+        for resource in resources {
+            storage[ObjectIdentifier(T.Id.self), default: [:]][resource.id] = resource
+        }
     }
 
     public subscript<T: JSONAPI.IdentifiableResourceObjectType>(id: T.Id) -> StoredResource<T>? {

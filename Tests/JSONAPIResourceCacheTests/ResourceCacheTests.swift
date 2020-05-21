@@ -78,6 +78,82 @@ final class ResourceCacheTests: XCTestCase {
         XCTAssertEqual(cache.type2s[type2s[1].id], type2s[1])
         XCTAssertEqual(type2s[1].id.materialize(from: cache), type2s[1])
     }
+
+    func test_documentCreation() {
+        let t1Id = "1234"
+        let t2Id = "5678"
+        let t2Id2 = "1323221"
+        let t3Id = "910112"
+
+        let date = Date()
+
+        let type3 = Type3(
+            id: .init(rawValue: t3Id),
+            attributes: .init(int: 1234),
+            relationships: .init(type2: .init(id: .init(rawValue: t2Id))),
+            meta: .none,
+            links: .none
+        )
+
+        let type2s = [
+            Type2(
+                id: .init(rawValue: t2Id),
+                attributes: .init(string: "hello world"),
+                relationships: .init(
+                    type1: .init(id: .init(rawValue: t1Id)),
+                    type3: .init(id: .init(rawValue: t3Id))
+                ),
+                meta: .none,
+                links: .none
+            ),
+            Type2(
+                id: .init(rawValue: t2Id2),
+                attributes: .init(string: "hi"),
+                relationships: .init(
+                    type1: .init(id: .init(rawValue: t1Id)),
+                    type3: .init(id: .init(rawValue: t3Id))
+                ),
+                meta: .none,
+                links: .none
+            )
+        ]
+
+        let type1 = Type1(
+            id: .init(rawValue: t1Id),
+            attributes: .init(createdAt: .init(value: date)),
+            relationships: .init(
+                type2: .init(id: .init(rawValue: t2Id)),
+                type4: .init(ids: [])
+            ),
+            meta: .none,
+            links: .none
+        )
+
+        let document = JSONAPI.Document<
+            ManyResourceBody<Type2>,
+            NoMetadata,
+            NoLinks,
+            Include2<Type1, Type3>,
+            NoAPIDescription,
+            UnknownJSONAPIError>(
+                apiDescription: .none,
+                body: .init(resourceObjects: type2s),
+                includes: .init(values: [.init(type1), .init(type3)]),
+                meta: .none,
+                links: .none
+        )
+
+        let cache = document.resourceCache()
+
+        XCTAssertEqual(cache?[type1.id], type1)
+        XCTAssertEqual(cache?[type2s[0].id], type2s[0])
+        XCTAssertEqual(cache?[type2s[1].id], type2s[1])
+        XCTAssertEqual(cache?[type3.id], type3)
+
+        let firstPrimaryResource = document.body.primaryResource!.values.first!
+        XCTAssertEqual((firstPrimaryResource ~> \.type1).materialize(from: cache!), type1)
+        XCTAssertEqual((firstPrimaryResource ~> \.type3).materialize(from: cache!), type3)
+    }
 }
 
 // MARK: - Test Types
@@ -142,7 +218,7 @@ struct ResourceCache: JSONAPIResourceCache.ResourceCache {
     var type4s: ResourceHash<Type4> = [:]
 }
 
-protocol Materializable: JSONAPIResourceCache.Materializable where ResourceCacheType == ResourceCache {}
+//protocol Materializable: JSONAPIResourceCache.Materializable where ResourceCacheType == ResourceCache {}
 
 extension Type1Description: Materializable {
     static var cachePath: WritableKeyPath<ResourceCache, ResourceHash<Type1>> { \.type1s }

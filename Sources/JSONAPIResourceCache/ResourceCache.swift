@@ -182,3 +182,76 @@ extension EncodableJSONAPIDocument where
         return cache
     }
 }
+
+// MARK: Success Documents
+// success documents can return non-optional caches
+
+extension Document.SuccessDocument where
+    BodyData.PrimaryResourceBody: SingleResourceBodyProtocol,
+    BodyData.PrimaryResourceBody.PrimaryResource: CacheableResource,
+    BodyData.IncludeType: CacheableResource,
+    BodyData.PrimaryResourceBody.PrimaryResource.Cache == BodyData.IncludeType.Cache {
+    public func resourceCache() -> BodyData.IncludeType.Cache {
+
+        var cache = BodyData.IncludeType.Cache()
+
+        data.primary.value.cache(in: &cache)
+
+        for include in data.includes.values {
+            include.cache(in: &cache)
+        }
+
+        return cache
+    }
+}
+
+extension Document.SuccessDocument where
+    BodyData.PrimaryResourceBody: ManyResourceBodyProtocol,
+    BodyData.PrimaryResourceBody.PrimaryResource: CacheableResource,
+    BodyData.IncludeType: CacheableResource,
+    BodyData.PrimaryResourceBody.PrimaryResource.Cache == BodyData.IncludeType.Cache {
+    public func resourceCache() -> BodyData.IncludeType.Cache {
+
+        var cache = BodyData.IncludeType.Cache()
+
+        for resource in data.primary.values {
+            resource.cache(in: &cache)
+        }
+
+        for include in data.includes.values {
+            include.cache(in: &cache)
+        }
+
+        return cache
+    }
+}
+
+extension Document.SuccessDocument where
+    BodyData.PrimaryResourceBody: SingleResourceBodyProtocol,
+    BodyData.PrimaryResourceBody.PrimaryResource: CacheableResource,
+    BodyData.IncludeType == NoIncludes {
+    public func resourceCache() -> BodyData.PrimaryResourceBody.PrimaryResource.Cache {
+
+        var cache = BodyData.PrimaryResourceBody.PrimaryResource.Cache()
+
+        data.primary.value.cache(in: &cache)
+
+        return cache
+    }
+}
+
+extension Document.SuccessDocument where
+    BodyData.PrimaryResourceBody: ManyResourceBodyProtocol,
+    BodyData.PrimaryResourceBody.PrimaryResource: CacheableResource,
+    BodyData.IncludeType == NoIncludes {
+    public func resourceCache() -> BodyData.PrimaryResourceBody.PrimaryResource.Cache {
+
+        var cache = BodyData.PrimaryResourceBody.PrimaryResource.Cache()
+
+        for resource in data.primary.values {
+            resource.cache(in: &cache)
+        }
+
+        return cache
+    }
+}

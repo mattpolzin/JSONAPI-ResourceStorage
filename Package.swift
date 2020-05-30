@@ -15,7 +15,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/mattpolzin/JSONAPI", from: "4.0.0-alpha.3"),
+       .package(url: "https://github.com/mattpolzin/JSONAPI", from: "4.0.0-alpha.3.2"),
     ],
     targets: [
         .target(

@@ -10,6 +10,8 @@ This package has two modules.
 
 ## JSONAPIResourceCache
 
+You can view an example using this strategy in [Google Colab](https://colab.research.google.com/drive/196eCnBlf2xz8pT4lW--ur6eWSVAjpF6b?usp=sharing).
+
 Without endorsing this degree of force unwrapping, here's a chunk of code in lieu of a properly fleshed out README.
 ```swift
 import JSONAPIResourceCache

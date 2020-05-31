@@ -79,11 +79,11 @@ struct Cache: Equatable, ResourceCache {
  4. We need to tell people and dogs where to find themselves in the cache.
  */
 extension PersonDescription: Materializable {
-    static var cachePath: WritableKeyPath<Cache, ResourceHash<Person>> { \.people }
+    public static var cachePath: WritableKeyPath<Cache, ResourceHash<Person>> { \.people }
 }
 
 extension DogDescription: Materializable {
-    static var cachePath: WritableKeyPath<Cache, ResourceHash<Dog>> { \.dogs }
+    public static var cachePath: WritableKeyPath<Cache, ResourceHash<Dog>> { \.dogs }
 }
 
 

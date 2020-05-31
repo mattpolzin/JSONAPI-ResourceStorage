@@ -57,12 +57,12 @@ final class ResourceCacheTests: XCTestCase {
         var cache = ResourceCache()
         XCTAssertNil(cache[type1.id])
         XCTAssertNil(cache.type1s[type1.id])
-        XCTAssertNil(type1.id.materialize(from: cache))
+        XCTAssertNil(type1.id.materialized(from: cache))
 
         cache.upsert(type1)
         XCTAssertEqual(cache[type1.id], type1)
         XCTAssertEqual(cache.type1s[type1.id], type1)
-        XCTAssertEqual(type1.id.materialize(from: cache), type1)
+        XCTAssertEqual(type1.id.materialized(from: cache), type1)
         XCTAssertNil(cache[type2s[0].id])
         XCTAssertNil(cache[type2s[1].id])
         XCTAssertNil(cache[type3.id])
@@ -70,13 +70,13 @@ final class ResourceCacheTests: XCTestCase {
         cache.upsert(type2s)
         XCTAssertEqual(cache[type1.id], type1)
         XCTAssertEqual(cache.type1s[type1.id], type1)
-        XCTAssertEqual(type1.id.materialize(from: cache), type1)
+        XCTAssertEqual(type1.id.materialized(from: cache), type1)
         XCTAssertEqual(cache[type2s[0].id], type2s[0])
         XCTAssertEqual(cache.type2s[type2s[0].id], type2s[0])
-        XCTAssertEqual(type2s[0].id.materialize(from: cache), type2s[0])
+        XCTAssertEqual(type2s[0].id.materialized(from: cache), type2s[0])
         XCTAssertEqual(cache[type2s[1].id], type2s[1])
         XCTAssertEqual(cache.type2s[type2s[1].id], type2s[1])
-        XCTAssertEqual(type2s[1].id.materialize(from: cache), type2s[1])
+        XCTAssertEqual(type2s[1].id.materialized(from: cache), type2s[1])
     }
 
     func test_documentCreation() {
@@ -151,8 +151,8 @@ final class ResourceCacheTests: XCTestCase {
         XCTAssertEqual(cache?[type3.id], type3)
 
         let firstPrimaryResource = document.body.primaryResource!.values.first!
-        XCTAssertEqual((firstPrimaryResource ~> \.type1).materialize(from: cache!), type1)
-        XCTAssertEqual((firstPrimaryResource ~> \.type3).materialize(from: cache!), type3)
+        XCTAssertEqual((firstPrimaryResource ~> \.type1).materialized(from: cache!), type1)
+        XCTAssertEqual((firstPrimaryResource ~> \.type3).materialized(from: cache!), type3)
     }
 
     func test_successDocumentCreation() {
@@ -227,13 +227,13 @@ final class ResourceCacheTests: XCTestCase {
         XCTAssertEqual(cache[type3.id], type3)
 
         let firstPrimaryResource = document.body.primaryResource!.values.first!
-        XCTAssertEqual((firstPrimaryResource ~> \.type1).materialize(from: cache), type1)
-        XCTAssertEqual((firstPrimaryResource ~> \.type3).materialize(from: cache), type3)
+        XCTAssertEqual((firstPrimaryResource ~> \.type1).materialized(from: cache), type1)
+        XCTAssertEqual((firstPrimaryResource ~> \.type3).materialized(from: cache), type3)
     }
 }
 
 // MARK: - Test Types
-enum Type1Description: JSONAPI.ResourceObjectDescription {
+fileprivate enum Type1Description: JSONAPI.ResourceObjectDescription {
     static let jsonType: String = "type1"
 
     struct Attributes: JSONAPI.Attributes {
@@ -246,9 +246,9 @@ enum Type1Description: JSONAPI.ResourceObjectDescription {
     }
 }
 
-typealias Type1 = JSONAPI.ResourceObject<Type1Description, NoMetadata, NoLinks, String>
+fileprivate typealias Type1 = JSONAPI.ResourceObject<Type1Description, NoMetadata, NoLinks, String>
 
-enum Type2Description: JSONAPI.ResourceObjectDescription {
+fileprivate enum Type2Description: JSONAPI.ResourceObjectDescription {
     static let jsonType: String = "type2"
 
     struct Attributes: JSONAPI.Attributes {
@@ -261,9 +261,9 @@ enum Type2Description: JSONAPI.ResourceObjectDescription {
     }
 }
 
-typealias Type2 = JSONAPI.ResourceObject<Type2Description, NoMetadata, NoLinks, String>
+fileprivate typealias Type2 = JSONAPI.ResourceObject<Type2Description, NoMetadata, NoLinks, String>
 
-enum Type3Description: JSONAPI.ResourceObjectDescription {
+fileprivate enum Type3Description: JSONAPI.ResourceObjectDescription {
     static let jsonType: String = "type3"
 
     struct Attributes: JSONAPI.Attributes {
@@ -275,19 +275,19 @@ enum Type3Description: JSONAPI.ResourceObjectDescription {
     }
 }
 
-typealias Type3 = JSONAPI.ResourceObject<Type3Description, NoMetadata, NoLinks, String>
+fileprivate typealias Type3 = JSONAPI.ResourceObject<Type3Description, NoMetadata, NoLinks, String>
 
-enum Type4Description: JSONAPI.ResourceObjectDescription {
+fileprivate enum Type4Description: JSONAPI.ResourceObjectDescription {
     static let jsonType: String = "type4"
 
     typealias Attributes = NoAttributes
     typealias Relationships = NoRelationships
 }
 
-typealias Type4 = JSONAPI.ResourceObject<Type4Description, NoMetadata, NoLinks, String>
+fileprivate typealias Type4 = JSONAPI.ResourceObject<Type4Description, NoMetadata, NoLinks, String>
 
 // MARK: - Cache
-struct ResourceCache: JSONAPIResourceCache.ResourceCache {
+fileprivate struct ResourceCache: JSONAPIResourceCache.ResourceCache {
     var type1s: ResourceHash<Type1> = [:]
     var type2s: ResourceHash<Type2> = [:]
     var type3s: ResourceHash<Type3> = [:]

@@ -43,7 +43,7 @@ let primaryResource = document.body.primaryResource!.value
 
 // materialize the primary resource's `relative1` relationship from the
 // cache.
-let relative = (primaryResource ~> \.relative1).materialize(from: resourceCache) 
+let relative = (primaryResource ~> \.relative1).materialized(from: resourceCache) 
 ```
 
 ## JSONAPIResourceStore

@@ -4,6 +4,10 @@ import PackageDescription
 
 let package = Package(
     name: "JSONAPI-ResourceStorage",
+    platforms: [
+        .macOS(.v10_10),
+        .iOS(.v10)
+    ],
     products: [
         .library(
             name: "JSONAPIResourceStore",

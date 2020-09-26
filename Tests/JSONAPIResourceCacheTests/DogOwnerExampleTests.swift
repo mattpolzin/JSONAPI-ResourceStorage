@@ -32,7 +32,7 @@ struct PersonDescription: ResourceObjectDescription {
     }
 
     struct Relationships: JSONAPI.Relationships {
-        let pets: ToManyRelationship<Dog, NoMetadata, NoLinks>
+        let pets: ToManyRelationship<Dog, NoIdMetadata, NoMetadata, NoLinks>
     }
 }
 

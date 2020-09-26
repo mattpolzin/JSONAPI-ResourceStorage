@@ -53,13 +53,13 @@ public struct StoredResource<JSONAPIModel: JSONAPI.IdentifiableResourceObjectTyp
 
     // MARK: Relationship Lookup
     /// Access a related To-one resource if it is available in the resource store.
-    public subscript<OtherEntity: Relatable, MetaType: JSONAPI.Meta, LinksType: JSONAPI.Links>(dynamicMember path: KeyPath<JSONAPIModel.Relationships, ToOneRelationship<OtherEntity, MetaType, LinksType>>) -> StoredResource<OtherEntity>? {
+    public subscript<OtherEntity: Relatable, IdMetaType: JSONAPI.Meta, MetaType: JSONAPI.Meta, LinksType: JSONAPI.Links>(dynamicMember path: KeyPath<JSONAPIModel.Relationships, ToOneRelationship<OtherEntity, IdMetaType, MetaType, LinksType>>) -> StoredResource<OtherEntity>? {
         let relativeId = primary.relationships[keyPath: path].id
         return store.storage[ObjectIdentifier(OtherEntity.ID.self)].flatMap { $0[relativeId].map { StoredResource<OtherEntity>(store: self.store, primary: $0 as! OtherEntity) } }
     }
 
     /// Access related To-many resources if they are available in the resource store.
-    public subscript<OtherEntity: Relatable, MetaType: JSONAPI.Meta, LinksType: JSONAPI.Links>(dynamicMember path: KeyPath<JSONAPIModel.Relationships, ToManyRelationship<OtherEntity, MetaType, LinksType>>) -> [StoredResource<OtherEntity>] {
+    public subscript<OtherEntity: Relatable, IdMetaType: JSONAPI.Meta, MetaType: JSONAPI.Meta, LinksType: JSONAPI.Links>(dynamicMember path: KeyPath<JSONAPIModel.Relationships, ToManyRelationship<OtherEntity, IdMetaType, MetaType, LinksType>>) -> [StoredResource<OtherEntity>] {
         let relativeIds = primary.relationships[keyPath: path].ids
         return relativeIds.compactMap { otherId in
             store.storage[ObjectIdentifier(OtherEntity.ID.self)].flatMap { resourceHash in

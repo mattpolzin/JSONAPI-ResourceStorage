@@ -3,16 +3,16 @@
     "pins": [
       {
         "package": "JSONAPI",
-        "repositoryURL": "https://github.com/mattpolzin/JSONAPI",
+        "repositoryURL": "https://github.com/mattpolzin/JSONAPI.git",
         "state": {
           "branch": null,
-          "revision": "51cb140ebf27949d1185227e3eaef5a54d9a3bee",
-          "version": "4.0.0"
+          "revision": "c645c73f51808b85a881e8af6f286086ee65cc35",
+          "version": "5.0.0"
         }
       },
       {
         "package": "Poly",
-        "repositoryURL": "https://github.com/mattpolzin/Poly",
+        "repositoryURL": "https://github.com/mattpolzin/Poly.git",
         "state": {
           "branch": null,
           "revision": "36ba3f624bffa34f5f9b9c7648eab3cfdcab4748",

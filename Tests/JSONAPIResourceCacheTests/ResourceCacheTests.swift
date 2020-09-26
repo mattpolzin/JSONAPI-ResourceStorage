@@ -241,8 +241,8 @@ fileprivate enum Type1Description: JSONAPI.ResourceObjectDescription {
     }
 
     struct Relationships: JSONAPI.Relationships {
-        let type2: ToOneRelationship<Type2, NoMetadata, NoLinks>
-        let type4: ToManyRelationship<Type4, NoMetadata, NoLinks>
+        let type2: ToOneRelationship<Type2, NoIdMetadata, NoMetadata, NoLinks>
+        let type4: ToManyRelationship<Type4, NoIdMetadata, NoMetadata, NoLinks>
     }
 }
 
@@ -256,8 +256,8 @@ fileprivate enum Type2Description: JSONAPI.ResourceObjectDescription {
     }
 
     struct Relationships: JSONAPI.Relationships {
-        let type1: ToOneRelationship<Type1, NoMetadata, NoLinks>
-        let type3: ToOneRelationship<Type3, NoMetadata, NoLinks>
+        let type1: ToOneRelationship<Type1, NoIdMetadata, NoMetadata, NoLinks>
+        let type3: ToOneRelationship<Type3, NoIdMetadata, NoMetadata, NoLinks>
     }
 }
 
@@ -271,7 +271,7 @@ fileprivate enum Type3Description: JSONAPI.ResourceObjectDescription {
     }
 
     struct Relationships: JSONAPI.Relationships {
-        let type2: ToOneRelationship<Type2, NoMetadata, NoLinks>
+        let type2: ToOneRelationship<Type2, NoIdMetadata, NoMetadata, NoLinks>
     }
 }
 

@@ -25,6 +25,12 @@ public final class ResourceStore {
         }
     }
 
+    /// Merge another resource store into this one in-place. Values from the other resource store
+    /// with the same identifiers will replace values from this resource store.
+    public func merge(_ other: ResourceStore) {
+        storage.merge(other.storage) { _, new in new }
+    }
+
     public subscript<T: JSONAPI.IdentifiableResourceObjectType>(id: T.Id) -> StoredResource<T>? {
         return storage[ObjectIdentifier(T.Id.self)].flatMap { resourceHash in
             resourceHash[id]
@@ -50,6 +56,12 @@ extension EncodableJSONAPIDocument where BodyData.PrimaryResourceBody: SingleRes
 
         return store
     }
+
+    public func storedPrimaryResource() -> StoredResource<BodyData.PrimaryResourceBody.PrimaryResource>? {
+        guard let bodyData = body.data,
+              let resourceStore = resourceStore() else { return nil }
+        return StoredResource(store: resourceStore, primary: bodyData.primary.value)
+    }
 }
 
 extension EncodableJSONAPIDocument where BodyData.PrimaryResourceBody: ManyResourceBodyProtocol, BodyData.PrimaryResourceBody.PrimaryResource: JSONAPI.IdentifiableResourceObjectType, BodyData.IncludeType: StorableResource {
@@ -69,5 +81,11 @@ extension EncodableJSONAPIDocument where BodyData.PrimaryResourceBody: ManyResou
         }
 
         return store
+    }
+
+    public func storedPrimaryResources() -> [StoredResource<BodyData.PrimaryResourceBody.PrimaryResource>] {
+        guard let bodyData = body.data,
+              let resourceStore = resourceStore() else { return [] }
+        return bodyData.primary.values.map { StoredResource(store: resourceStore, primary: $0) }
     }
 }

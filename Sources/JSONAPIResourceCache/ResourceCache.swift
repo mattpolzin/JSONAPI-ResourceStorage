@@ -58,7 +58,7 @@ public protocol ResourceCache {
 /// let dog = dogId.materialize(from: cache)
 /// // equivalently: dog = cache[dogId]
 /// ```
-public protocol Materializable {
+public protocol Materializable: ResourceObjectDescription {
     associatedtype ResourceCacheType: ResourceCache
     associatedtype IdentifiableType: JSONAPI.IdentifiableResourceObjectType where IdentifiableType.Description == Self
 
